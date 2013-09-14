@@ -1,0 +1,19 @@
+{
+  "name": "gullveig",
+  "version": "0.0.0",
+  "description": "nodejs 中间件",
+  "main": "index.js",
+  "keywords": [
+    "nodejs",
+    "middware"
+  ],
+  "readme":"README.md",
+  "dependencies": {
+    "async":"~0.2.9",
+    "express": "3.2.4",
+    "express-validator":"0.8.0",
+    "querystring":"0.2.0",
+    "string":"1.5.1",
+    "underscore": "~1.5.1"
+  }
+}
