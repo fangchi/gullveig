@@ -1,8 +1,7 @@
 var routers = require('../conf/routers'),
 	_ = require('underscore'),
 	S = require('string'),
-	redirector = require('./redirector'),
-	async = require('async');
+	redirector = require('./redirector');
 
 module.exports = function(app) {
 
