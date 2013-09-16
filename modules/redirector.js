@@ -1,4 +1,5 @@
 var routers = require('../conf/routers'),
+	BufferHelper = require('bufferhelper'),
 	_ = require('underscore'),
 	http = require('http'),
 	https = require('https'),
@@ -22,15 +23,21 @@ exports.redirect = function(req, res, newUrl, plugins, pluginCallback) {
 
 	//回调函数
 	var dataCallback = function(response) {
+
+		var bufferHelper = new BufferHelper();
 		response.setEncoding('utf8');
 		response.on('data', function(chunk) {
+            bufferHelper.concat(chunk);
+		}).on('end', function(chunk) {
 			if (plugins) { // 如果后续处理插件
-				var args = [plugins, req, res, response, chunk];
+				var args = [plugins, req, res, response, bufferHelper.toBuffer().toString()];
 				pluginCallback.apply(null, args);
 			} else {
-				res.json(chunk, response.statusCode);
+				res.json(bufferHelper.toBuffer().toString(), response.statusCode);
 			}
-		});
+		}).on('error', function(err) {
+           res.json('{"status":-1,"info":"'+err.toString()+'"}', response.statusCode);
+        });
 	};
 	var request = null;
 	//按照协议构建请求
@@ -41,9 +48,8 @@ exports.redirect = function(req, res, newUrl, plugins, pluginCallback) {
 	} else {
 		throw 'can not redirect request for unknown prococal ' + args[0];
 	}
-
 	request.on('error', function(e) {
-		res.json('server is error for the reason :' + e.toString(), 500);
+		res.json('{"status":-1,"info":"'+e.toString()+'"}', 500);
 	});
 	request.write(post_data); //Write body data 
 }

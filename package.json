@@ -9,6 +9,7 @@
   ],
   "readme":"README.md",
   "dependencies": {
+    "bufferhelper":"0.2.0",
     "express": "3.2.4",
     "express-validator":"0.8.0",
     "querystring":"0.2.0",
